@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
         actions.appendChild(undoButton);
 
         const noteButton = document.createElement("button");
-        noteButton.textContent = "إضافة ملاحظة";
+        noteButton.textContent = "✏️";
         noteButton.onclick = () => {
             const note = prompt("أدخل الملاحظة:");
             if (note) {
