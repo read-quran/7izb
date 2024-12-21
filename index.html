@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأحزاب</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>إدارة الأحزاب</h1>
+    </header>
+    <div class="report-box">
+        <p>الأحزاب المكتملة: <span id="completed-count">0</span></p>
+        <p>الأحزاب المتبقية: <span id="remaining-count">0</span></p>
+    </div>
+    <main>
+        <section class="settings">
+            <h2>إعدادات الأحزاب</h2>
+            <label for="from">من حزب:</label>
+            <input type="number" id="from" min="1" max="60">
+            <label for="to">إلى حزب:</label>
+            <input type="number" id="to" min="1" max="60">
+            <label for="first-day">اليوم الأول:</label>
+            <select id="first-day">
+                <option>الاثنين</option>
+                <option>الثلاثاء</option>
+                <option>الأربعاء</option>
+                <option>الخميس</option>
+                <option>الجمعة</option>
+                <option>السبت</option>
+                <option>الأحد</option>
+            </select>
+            <button id="generate">توليد الأحزاب</button>
+            <button id="reset">تهيئة الصفحة</button>
+        </section>
+        <button id="toggle-settings">إخفاء قائمة الإعدادات</button>
+        <section class="parties">
+            <h2>قائمة الأحزاب</h2>
+            <div id="parties-list"></div>
+        </section>
+    </main>
+    <footer>
+        <p>سبحان الله وبحمده سبحان الله العظيم</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
