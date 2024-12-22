@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const remainingCount = document.getElementById("remaining-count");
     const toggleSettingsButton = document.getElementById("toggle-settings");
     const itemsTitle = document.getElementById("items-title");
+    const itemsSection = document.querySelector(".items-section");
 
     let currentMode = "hizb";
     let itemsData = {
@@ -17,6 +18,14 @@ document.addEventListener("DOMContentLoaded", () => {
         juz: JSON.parse(localStorage.getItem("juzData")) || []
     };
     let isSettingsVisible = JSON.parse(localStorage.getItem("isSettingsVisible")) ?? true;
+
+    // استعادة الوضع المحفوظ
+    const savedMode = localStorage.getItem("currentMode");
+    if (savedMode) {
+        currentMode = savedMode;
+        viewModeSelect.value = savedMode;
+        itemsSection.style.borderColor = savedMode === "hizb" ? "green" : "red";
+    }
 
     function updateInputLimits() {
         const maxValue = currentMode === "hizb" ? 60 : 30;
@@ -211,11 +220,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    viewModeSelect.onchange = () => {
-        currentMode = viewModeSelect.value;
-        updateInputLimits();
-        loadData();
-    };
+viewModeSelect.onchange = () => {
+    currentMode = viewModeSelect.value;
+    updateInputLimits();
+    loadData();
+    const itemsSection = document.querySelector(".items-section");
+    if (currentMode === "hizb") {
+        itemsSection.style.borderColor = "green";
+    } else if (currentMode === "juz") {
+        itemsSection.style.borderColor = "red";
+    }
+
+    // حفظ النوع في localStorage
+    localStorage.setItem("currentMode", currentMode);
+};
+
 
     toggleSettingsButton.onclick = () => {
         isSettingsVisible = !isSettingsVisible;
