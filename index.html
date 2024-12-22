@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأجزاء والأحزاب</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>إدارة الأجزاء والأحزاب</h1>
+    </header>
+    <div class="mode-selector">
+        <select id="view-mode">
+            <option value="hizb">الأحزاب</option>
+            <option value="juz">الأجزاء</option>
+        </select>
+    </div>
+    <div class="report-box">
+        <p>المكتمل: <span id="completed-count">0</span></p>
+        <p>المتبقي: <span id="remaining-count">0</span></p>
+    </div>
+    <main>
+        <section class="settings">
+            <h2>الإعدادات</h2>
+            <div id="range-settings">
+                <label for="from">من:</label>
+                <input type="number" id="from" min="1">
+                <label for="to">إلى:</label>
+                <input type="number" id="to" min="1">
+            </div>
+            <label for="first-day">اليوم الأول:</label>
+            <select id="first-day">
+                <option>الأحد</option>
+                <option>الاثنين</option>
+                <option>الثلاثاء</option>
+                <option>الأربعاء</option>
+                <option>الخميس</option>
+                <option>الجمعة</option>
+                <option>السبت</option>
+            </select>
+            <button id="generate">توليد</button>
+            <button id="reset">تهيئة الصفحة</button>
+        </section>
+        <button id="toggle-settings">إخفاء قائمة الإعدادات</button>
+        <section class="items-section">
+            <h2 id="items-title">قائمة الأحزاب</h2>
+            <div id="items-list"></div>
+        </section>
+    </main>
+    <footer>
+        <p>سبحان الله وبحمده سبحان الله العظيم</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
