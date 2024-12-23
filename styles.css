@@ -167,6 +167,7 @@ header h1 {
     flex-wrap: wrap;
     gap: 0.5rem;
     margin-top: 0.5rem;
+    position: relative;
 }
 
 .item button {
@@ -225,6 +226,62 @@ header h1 {
     font-size: 0.9rem;
 }
 
+/* تنسيقات نافذة التفاصيل المنبثقة */
+.details-popup {
+    display: none;
+    position: absolute;
+    background-color: #28293d;
+    border: 1px solid #555;
+    border-radius: 4px;
+    padding: 1rem;
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.details-popup.visible {
+    display: block;
+}
+
+.details-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 0.5rem;
+}
+
+.details-table th,
+.details-table td {
+    padding: 0.5rem;
+    border: 1px solid #555;
+    text-align: right;
+}
+
+.details-table th {
+    background-color: #3b3b50;
+    font-weight: bold;
+}
+
+.details-table tr:nth-child(even) {
+    background-color: #1e1e2f;
+}
+
+.details-close {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* تذييل الصفحة */
 footer {
     text-align: center;
@@ -275,6 +332,14 @@ footer {
         margin: 1rem;
     }
 
+    .details-popup {
+        width: 95%;
+        margin: 0 auto;
+        left: 2.5%;
+        right: 2.5%;
+    }
+}
+
 .items-section.hizb {
     border-color: green;
 }
@@ -289,5 +354,4 @@ footer {
 
 #view-mode option[value="juz"] {
     color: red;
-}
 }
