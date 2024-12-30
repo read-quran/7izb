@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إدارة الأجزاء والأحزاب</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>إدارة الأجزاء والأحزاب</h1>
+    </header>
+    <div class="mode-selector">
+        <select id="view-mode">
+            <option value="hizb">الأحزاب</option>
+            <option value="juz">الأجزاء</option>
+        </select>
+    </div>
+    <div class="report-box">
+        <p>المكتمل: <span id="completed-count">0</span></p>
+        <p>المتبقي: <span id="remaining-count">0</span></p>
+    </div>
+    <main>
+        <!-- قسم الإحصائيات -->
+        <section class="statistics">
+            <button id="toggle-statistics" title="إخفاء/إظهار الإحصائيات">إخفاء الإحصائيات</button>
+            <table id="statistics-table">
+                <tr>
+                    <th>آخر ما تم إنهاؤه</th>
+                    <td><span id="last-completed-item">لا يوجد</span></td>
+                </tr>
+                <tr>
+                    <th>الوقت والتاريخ</th>
+                    <td><span id="last-completed-time">لا يوجد</span></td>
+                </tr>
+                <tr>
+                    <th>من الآية</th>
+                    <td><span id="last-completed-verse-from">لا يوجد</span></td>
+                </tr>
+                <tr>
+                    <th>إلى الآية</th>
+                    <td><span id="last-completed-verse-to">لا يوجد</span></td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- قسم الإعدادات -->
+        <section class="settings">
+            <div class="settings-header">
+                <h2>الإعدادات</h2>
+                <button id="toggle-settings" title="إخفاء/إظهار الإعدادات">⚙️</button>
+            </div>
+            <div id="settings-content">
+                <div id="range-settings">
+                    <label for="from">من:</label>
+                    <input type="number" id="from" min="1">
+                    <label for="to">إلى:</label>
+                    <input type="number" id="to" min="1">
+                </div>
+                <label for="first-day">اليوم الأول:</label>
+                <select id="first-day">
+                    <option>الأحد</option>
+                    <option>الاثنين</option>
+                    <option>الثلاثاء</option>
+                    <option>الأربعاء</option>
+                    <option>الخميس</option>
+                    <option>الجمعة</option>
+                    <option>السبت</option>
+                </select>
+                <button id="generate">توليد</button>
+                <button id="reset">تهيئة الصفحة</button>
+            </div>
+        </section>
+
+        <!-- قسم العناصر -->
+        <section class="items-section">
+            <h2 id="items-title">قائمة الأحزاب</h2>
+            <input type="text" id="search" placeholder="بحث بالرقم...">
+            <!-- زر الاسترجاع العام والقائمة المنسدلة -->
+            <div class="restore-section">
+                <select id="restore-dropdown" style="display: none;">
+                    <option value="">اختر عنصرًا لاسترجاعه</option>
+                </select>
+            </div>
+            <div id="items-list"></div>
+        </section>
+    </main>
+    <footer>
+        <p>سبحان الله وبحمده سبحان الله العظيم</p>
+    </footer>
+    <button id="scroll-to-top" title="تمرير للأعلى">▲</button>
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
