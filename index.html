@@ -16,10 +16,6 @@
             <option value="juz">الأجزاء</option>
         </select>
     </div>
-    <div class="report-box">
-        <p>المكتمل: <span id="completed-count">0</span></p>
-        <p>المتبقي: <span id="remaining-count">0</span></p>
-    </div>
     <main>
         <!-- قسم الإحصائيات -->
         <section class="statistics">
@@ -42,6 +38,12 @@
                     <td><span id="last-completed-verse-to">لا يوجد</span></td>
                 </tr>
             </table>
+            <!-- إضافة المتبقي والمكتمل وزر المشاركة -->
+            <div class="statistics-footer">
+                <p>المكتمل: <span id="completed-count-statistics">0</span></p>
+                <p>المتبقي: <span id="remaining-count-statistics">0</span></p>
+                <button id="share-button-statistics" class="share-button">مشاركة التقدم عبر الواتساب</button>
+            </div>
         </section>
 
         <!-- قسم الإعدادات -->
