@@ -6,8 +6,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const generateButton = document.getElementById("generate");
     const resetButton = document.getElementById("reset");
     const itemsList = document.getElementById("items-list");
-    const completedCount = document.getElementById("completed-count");
-    const remainingCount = document.getElementById("remaining-count");
+    const completedCount = document.getElementById("completed-count-statistics");
+    const remainingCount = document.getElementById("remaining-count-statistics");
     const toggleSettingsButton = document.getElementById("toggle-settings");
     const itemsTitle = document.getElementById("items-title");
     const itemsSection = document.querySelector(".items-section");
@@ -115,12 +115,8 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
         }
     }
 
-    // إضافة زر المشاركة
-    const shareButton = document.createElement("button");
-    shareButton.textContent = "مشاركة التقدم عبر الواتساب";
-    shareButton.className = "share-button";
-    shareButton.onclick = shareProgressOnWhatsApp;
-    document.querySelector(".report-box").appendChild(shareButton);
+    // إضافة حدث النقر لزر المشاركة في قسم الإحصائيات
+    document.getElementById("share-button-statistics").onclick = shareProgressOnWhatsApp;
 
     function updateInputLimits() {
         const maxValue = currentMode === "hizb" ? 60 : 30;
@@ -459,6 +455,11 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
             lastCompletedVerseFrom.textContent = "لا يوجد";
             lastCompletedVerseTo.textContent = "لا يوجد";
         }
+
+        // تحديث المتبقي والمكتمل في قسم الإحصائيات
+        const completed = currentItems.filter((item) => item.completed).length;
+        completedCount.textContent = completed;
+        remainingCount.textContent = currentItems.length - completed;
     }
 
     function updateBorderColors() {
@@ -469,8 +470,6 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
         document.querySelector(".statistics").classList.add(modeClass);
         document.querySelector(".settings").classList.remove("hizb", "juz");
         document.querySelector(".settings").classList.add(modeClass);
-        document.querySelector(".report-box").classList.remove("hizb", "juz");
-        document.querySelector(".report-box").classList.add(modeClass);
         document.getElementById("scroll-to-top").classList.remove("hizb", "juz");
         document.getElementById("scroll-to-top").classList.add(modeClass);
     }
