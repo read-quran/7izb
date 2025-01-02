@@ -89,6 +89,62 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
+    function showNotePopup(item) {
+        const existingPopups = document.querySelectorAll('.note-popup');
+        existingPopups.forEach(popup => popup.remove());
+
+        const popup = document.createElement('div');
+        popup.className = 'note-popup';
+
+        const closeButton = document.createElement('button');
+        closeButton.className = 'note-close';
+        closeButton.textContent = '×';
+        closeButton.onclick = () => popup.remove();
+        popup.appendChild(closeButton);
+
+        const textarea = document.createElement('textarea');
+        textarea.value = item.note || '';
+        textarea.className = 'note-textarea';
+        textarea.setAttribute('rows', '5');
+        textarea.setAttribute('resize', 'both');
+        popup.appendChild(textarea);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.className = 'note-buttons';
+
+        const saveButton = document.createElement('button');
+        saveButton.textContent = 'حفظ';
+        saveButton.onclick = () => {
+            item.note = textarea.value.trim() || null;
+            saveData();
+            loadData();
+            popup.remove();
+        };
+        buttonContainer.appendChild(saveButton);
+
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'إلغاء';
+        cancelButton.onclick = () => popup.remove();
+        buttonContainer.appendChild(cancelButton);
+
+        popup.appendChild(buttonContainer);
+
+        document.body.appendChild(popup);
+
+        const rect = event.target.getBoundingClientRect();
+        popup.style.top = `${rect.bottom + window.scrollY + 10}px`;
+        popup.style.left = `${rect.left + window.scrollX}px`;
+
+        setTimeout(() => popup.classList.add('visible'), 10);
+
+        document.addEventListener('click', function closePopup(e) {
+            if (!popup.contains(e.target) && e.target !== event.target) {
+                popup.remove();
+                document.removeEventListener('click', closePopup);
+            }
+        });
+    }
+
     function updateInputLimits() {
         const maxValue = currentMode === "hizb" ? 60 : 30;
         fromInput.max = maxValue;
@@ -191,14 +247,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const noteButton = document.createElement("button");
         noteButton.textContent = item.note ? "تعديل الملاحظة" : "إضافة ملاحظة";
-        noteButton.onclick = () => {
-            const note = prompt("أدخل الملاحظة:", item.note || "");
-            if (note !== null) {
-                item.note = note.trim() || null;
-                saveData();
-                loadData();
-            }
-        };
+        noteButton.onclick = () => showNotePopup(item);
         actions.appendChild(noteButton);
 
         const colorButton = document.createElement("input");
