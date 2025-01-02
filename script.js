@@ -89,61 +89,37 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     };
 
-    function showNotePopup(item) {
-        const existingPopups = document.querySelectorAll('.note-popup');
-        existingPopups.forEach(popup => popup.remove());
+    function shareProgressOnWhatsApp() {
+        const currentItems = itemsData[currentMode];
+        const lastCompleted = currentItems.filter(item => item.completed).pop();
 
-        const popup = document.createElement('div');
-        popup.className = 'note-popup';
+        if (lastCompleted) {
+            const date = new Date();
+            const days = ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"];
+            const dayName = days[date.getDay()];
+            const formattedDate = date.toLocaleDateString();
+            const formattedTime = date.toLocaleTimeString();
 
-        const closeButton = document.createElement('button');
-        closeButton.className = 'note-close';
-        closeButton.textContent = '×';
-        closeButton.onclick = () => popup.remove();
-        popup.appendChild(closeButton);
+            // حساب عدد الأحزاب/الأجزاء المتبقية
+            const totalItems = currentMode === "hizb" ? 60 : 30;
+            const remainingItems = totalItems - currentItems.filter(item => item.completed).length;
 
-        const textarea = document.createElement('textarea');
-        textarea.value = item.note || '';
-        textarea.className = 'note-textarea';
-        textarea.setAttribute('rows', '5');
-        textarea.setAttribute('resize', 'both');
-        popup.appendChild(textarea);
+            const message = `تم بحمد الله وتوفيقه إكمال ${currentMode === "hizb" ? "الحزب" : "الجزء"} رقم ${lastCompleted.number}.
+آخر قراءة وحفظ كان ${currentMode === "hizb" ? "الحزب" : "الجزء"} رقم ${lastCompleted.number} في يوم ${dayName}، بتاريخ ${formattedDate}، والساعة ${formattedTime}.
+${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية: ${remainingItems}.`;
 
-        const buttonContainer = document.createElement('div');
-        buttonContainer.className = 'note-buttons';
-
-        const saveButton = document.createElement('button');
-        saveButton.textContent = 'حفظ';
-        saveButton.onclick = () => {
-            item.note = textarea.value.trim() || null;
-            saveData();
-            loadData();
-            popup.remove();
-        };
-        buttonContainer.appendChild(saveButton);
-
-        const cancelButton = document.createElement('button');
-        cancelButton.textContent = 'إلغاء';
-        cancelButton.onclick = () => popup.remove();
-        buttonContainer.appendChild(cancelButton);
-
-        popup.appendChild(buttonContainer);
-
-        document.body.appendChild(popup);
-
-        const rect = event.target.getBoundingClientRect();
-        popup.style.top = `${rect.bottom + window.scrollY + 10}px`;
-        popup.style.left = `${rect.left + window.scrollX}px`;
-
-        setTimeout(() => popup.classList.add('visible'), 10);
-
-        document.addEventListener('click', function closePopup(e) {
-            if (!popup.contains(e.target) && e.target !== event.target) {
-                popup.remove();
-                document.removeEventListener('click', closePopup);
-            }
-        });
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+        } else {
+            alert("لم يتم إكمال أي حزب/جزء بعد.");
+        }
     }
+
+    // إضافة زر المشاركة
+    const shareButton = document.createElement("button");
+    shareButton.textContent = "مشاركة التقدم عبر الواتساب";
+    shareButton.onclick = shareProgressOnWhatsApp;
+    document.querySelector(".report-box").appendChild(shareButton);
 
     function updateInputLimits() {
         const maxValue = currentMode === "hizb" ? 60 : 30;
@@ -247,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const noteButton = document.createElement("button");
         noteButton.textContent = item.note ? "تعديل الملاحظة" : "إضافة ملاحظة";
-        noteButton.onclick = () => showNotePopup(item);
+        noteButton.onclick = () => toggleNoteEdit(item, noteText, noteEditContainer);
         actions.appendChild(noteButton);
 
         const colorButton = document.createElement("input");
@@ -270,16 +246,60 @@ document.addEventListener("DOMContentLoaded", () => {
             details.appendChild(completedInfo);
         }
 
-        if (item.note) {
-            const noteText = document.createElement("div");
-            noteText.className = "note-text";
-            noteText.textContent = item.note;
-            details.appendChild(noteText);
-        }
+        // منطقة الملاحظات
+        const noteEditContainer = document.createElement("div");
+        noteEditContainer.className = "note-edit-container";
 
+        const noteText = document.createElement("div");
+        noteText.className = "note-text";
+        noteText.textContent = item.note || "";
+        noteEditContainer.appendChild(noteText);
+
+        const noteEditArea = document.createElement("textarea");
+        noteEditArea.className = "note-edit-area";
+        noteEditArea.style.display = "none";
+        noteEditContainer.appendChild(noteEditArea);
+
+        const noteEditButtons = document.createElement("div");
+        noteEditButtons.className = "note-edit-buttons";
+        noteEditButtons.style.display = "none";
+
+        const saveNoteButton = document.createElement("button");
+        saveNoteButton.textContent = "حفظ";
+        saveNoteButton.onclick = () => {
+            item.note = noteEditArea.value.trim() || null;
+            saveData();
+            loadData();
+        };
+
+        const cancelNoteButton = document.createElement("button");
+        cancelNoteButton.textContent = "إلغاء";
+        cancelNoteButton.onclick = () => toggleNoteEdit(item, noteText, noteEditContainer);
+
+        noteEditButtons.appendChild(saveNoteButton);
+        noteEditButtons.appendChild(cancelNoteButton);
+        noteEditContainer.appendChild(noteEditButtons);
+
+        details.appendChild(noteEditContainer);
         itemElement.appendChild(details);
         container.appendChild(itemElement);
         itemsList.appendChild(container);
+    }
+
+    function toggleNoteEdit(item, noteText, noteEditContainer) {
+        const noteEditArea = noteEditContainer.querySelector(".note-edit-area");
+        const noteEditButtons = noteEditContainer.querySelector(".note-edit-buttons");
+
+        if (noteEditArea.style.display === "none") {
+            noteText.style.display = "none";
+            noteEditArea.style.display = "block";
+            noteEditButtons.style.display = "flex";
+            noteEditArea.value = item.note || "";
+        } else {
+            noteText.style.display = "block";
+            noteEditArea.style.display = "none";
+            noteEditButtons.style.display = "none";
+        }
     }
 
     function showDetails(item) {
