@@ -118,6 +118,7 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
     // إضافة زر المشاركة
     const shareButton = document.createElement("button");
     shareButton.textContent = "مشاركة التقدم عبر الواتساب";
+    shareButton.className = "share-button";
     shareButton.onclick = shareProgressOnWhatsApp;
     document.querySelector(".report-box").appendChild(shareButton);
 
