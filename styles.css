@@ -565,7 +565,7 @@ footer {
 
 /* تنسيق زر المشاركة */
 .share-button {
-    background-color: #3b3b50; /* نفس لون زر إخفاء الإحصائيات */
+    background-color: #3b3b50;
     color: #fff;
     border: none;
     padding: 0.7rem 1rem;
@@ -573,12 +573,12 @@ footer {
     cursor: pointer;
     margin-top: 1rem;
     font-size: 1rem;
-    width: 100%; /* لجعله يأخذ العرض الكامل */
+    width: 35%; 
     text-align: center;
 }
 
 .share-button:hover {
-    background-color: #4c4c62; /* نفس لون التحويم لزر إخفاء الإحصائيات */
+    background-color: #4c4c62; 
 }
 
 /* تحسينات للهواتف المحمولة */
