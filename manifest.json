@@ -1,0 +1,15 @@
+{
+  "name": "إدارة الأجزاء والأحزاب",
+  "short_name": "QuranApp",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1e1e2f",
+  "theme_color": "#28293d",
+  "icons": [
+    {
+      "src": "quran.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}
