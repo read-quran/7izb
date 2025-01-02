@@ -318,40 +318,26 @@ header h1 {
     max-height: 200px;
 }
 
-/* تنسيقات نافذة الملاحظات المنبثقة */
-.note-popup {
-    display: none;
-    position: absolute;
-    background-color: #28293d;
-    border: 1px solid #555;
-    border-radius: 4px;
-    padding: 1rem;
-    z-index: 1000;
-    width: 300px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.note-popup.visible {
-    display: block;
-}
-
-.note-textarea {
+.note-edit-area {
     width: 100%;
     padding: 0.5rem;
-    margin-bottom: 1rem;
+    margin-top: 0.5rem;
     background-color: #1e1e2f;
     color: #cfcfcf;
     border: 1px solid #555;
     border-radius: 4px;
-    resize: both;
+    resize: vertical;
+    min-height: 100px;
 }
 
-.note-buttons {
-    display: flex;
-    justify-content: space-between;
+.note-edit-buttons {
+    display: none;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
 }
 
-.note-buttons button {
+.note-edit-buttons button {
     padding: 0.5rem 1rem;
     background-color: #3b3b50;
     color: #fff;
@@ -360,24 +346,8 @@ header h1 {
     cursor: pointer;
 }
 
-.note-buttons button:hover {
+.note-edit-buttons button:hover {
     background-color: #4c4c62;
-}
-
-.note-close {
-    position: absolute;
-    top: 0.5rem;
-    left: 0.5rem;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 24px;
-    height: 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* تنسيقات نافذة التفاصيل المنبثقة */
