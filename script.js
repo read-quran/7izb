@@ -278,9 +278,30 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
         noteEditContainer.appendChild(noteEditButtons);
 
         details.appendChild(noteEditContainer);
+
+        // منطقة الملاحظات الصوتية
+        const audioNotesContainer = document.createElement("div");
+        audioNotesContainer.className = "audio-notes";
+
+        const recordButton = document.createElement("button");
+        recordButton.className = "record-button";
+        recordButton.textContent = "🎤";
+        recordButton.title = "تسجيل ملاحظة صوتية";
+        recordButton.onclick = () => startRecording(item);
+
+        const audioList = document.createElement("div");
+        audioList.className = "audio-list";
+
+        audioNotesContainer.appendChild(recordButton);
+        audioNotesContainer.appendChild(audioList);
+        details.appendChild(audioNotesContainer);
+
         itemElement.appendChild(details);
         container.appendChild(itemElement);
         itemsList.appendChild(container);
+
+        // تحميل الملاحظات الصوتية المحفوظة
+        loadAudioNotes(item);
     }
 
     function toggleNoteEdit(item, noteText, noteEditContainer) {
@@ -505,7 +526,8 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
                 completedTime: null,
                 note: null,
                 color: "#1e1e2f",
-                hidden: false
+                hidden: false,
+                audioNotes: []
             });
             currentDayIndex = (currentDayIndex + 1) % days.length;
         }
@@ -563,6 +585,127 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
             updateRestoreDropdown();
         }
     };
+
+// دالة لتسجيل الصوت
+function startRecording(item) {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(stream => {
+            const mediaRecorder = new MediaRecorder(stream);
+            const audioChunks = [];
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const audioUrl = URL.createObjectURL(audioBlob);
+                saveAudioNote(item, audioUrl);
+
+                // إيقاف جميع المسارات في MediaStream
+                stream.getTracks().forEach(track => track.stop());
+            };
+
+            mediaRecorder.start();
+            item.recording = mediaRecorder;
+
+            // إظهار زر إيقاف التسجيل
+            const recordButton = document.querySelector(`[data-number="${item.number}"] .record-button`);
+            recordButton.textContent = "⏹️";
+            recordButton.onclick = () => stopRecording(item);
+        })
+        .catch(err => {
+            console.error('Error accessing microphone:', err);
+        });
+}
+
+// دالة لإيقاف التسجيل
+function stopRecording(item) {
+    if (item.recording) {
+        item.recording.stop();
+        item.recording = null;
+
+        // إعادة زر التسجيل إلى حالته الأصلية
+        const recordButton = document.querySelector(`[data-number="${item.number}"] .record-button`);
+        recordButton.textContent = "🎤";
+        recordButton.onclick = () => startRecording(item);
+    }
+}
+
+    // دالة لحفظ الملاحظة الصوتية
+function saveAudioNote(item, audioUrl) {
+    const audioNote = {
+        url: audioUrl,
+        timestamp: new Date().toLocaleString(),
+        title: "ملاحظة صوتية" // عنوان افتراضي
+    };
+
+    if (!item.audioNotes) {
+        item.audioNotes = [];
+    }
+    item.audioNotes.unshift(audioNote); // إضافة الملاحظة الجديدة في الأعلى
+    saveData();
+    loadAudioNotes(item);
+}
+
+// دالة لتحميل الملاحظات الصوتية
+function loadAudioNotes(item) {
+    const audioList = document.querySelector(`[data-number="${item.number}"] .audio-list`);
+    audioList.innerHTML = '';
+
+    if (item.audioNotes) {
+        item.audioNotes.forEach((note, index) => {
+            const audioElement = document.createElement('div');
+            audioElement.className = 'audio-note';
+
+            const playButton = document.createElement('button');
+            playButton.textContent = '▶️';
+            playButton.onclick = () => new Audio(note.url).play();
+
+            const title = document.createElement('span');
+            title.textContent = note.title;
+
+            const timestamp = document.createElement('span');
+            timestamp.textContent = note.timestamp;
+
+            const editButton = document.createElement('button');
+            editButton.textContent = '✏️';
+            editButton.className = 'edit-audio';
+            editButton.onclick = () => editAudioNote(item, index);
+
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '❌';
+            deleteButton.className = 'delete-audio';
+            deleteButton.onclick = () => deleteAudioNote(item, index);
+
+            audioElement.appendChild(playButton);
+            audioElement.appendChild(title);
+            audioElement.appendChild(timestamp);
+            audioElement.appendChild(editButton);
+            audioElement.appendChild(deleteButton);
+            audioList.appendChild(audioElement);
+        });
+    }
+}
+
+// دالة لتعديل عنوان الملاحظة الصوتية
+function editAudioNote(item, index) {
+    const newTitle = prompt("أدخل العنوان الجديد للملاحظة الصوتية:", item.audioNotes[index].title);
+    if (newTitle) {
+        item.audioNotes[index].title = newTitle;
+        saveData();
+        loadAudioNotes(item);
+    }
+}
+
+// دالة لحذف الملاحظة الصوتية
+function deleteAudioNote(item, index) {
+    if (confirm("هل أنت متأكد من حذف هذه الملاحظة الصوتية؟")) {
+        item.audioNotes.splice(index, 1);
+        saveData();
+        loadAudioNotes(item);
+    }
+}
 
     updateInputLimits();
     loadData();
