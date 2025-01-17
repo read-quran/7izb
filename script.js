@@ -658,31 +658,44 @@ function loadAudioNotes(item) {
             const audioElement = document.createElement('div');
             audioElement.className = 'audio-note';
 
-            const playButton = document.createElement('button');
-            playButton.textContent = '▶️';
-            playButton.onclick = () => new Audio(note.url).play();
+            const header = document.createElement('div');
+            header.className = 'audio-note-header';
 
             const title = document.createElement('span');
+            title.className = 'audio-note-title';
             title.textContent = note.title;
 
             const timestamp = document.createElement('span');
+            timestamp.className = 'audio-note-timestamp';
             timestamp.textContent = note.timestamp;
 
+            header.appendChild(title);
+            header.appendChild(timestamp);
+
+            const actions = document.createElement('div');
+            actions.className = 'audio-note-actions';
+
+            const playButton = document.createElement('button');
+            playButton.textContent = 'تشغيل';
+            playButton.className = 'play';
+            playButton.onclick = () => new Audio(note.url).play();
+
             const editButton = document.createElement('button');
-            editButton.textContent = '✏️';
-            editButton.className = 'edit-audio';
+            editButton.textContent = 'تعديل';
+            editButton.className = 'edit';
             editButton.onclick = () => editAudioNote(item, index);
 
             const deleteButton = document.createElement('button');
-            deleteButton.textContent = '❌';
-            deleteButton.className = 'delete-audio';
+            deleteButton.textContent = 'حذف';
+            deleteButton.className = 'delete';
             deleteButton.onclick = () => deleteAudioNote(item, index);
 
-            audioElement.appendChild(playButton);
-            audioElement.appendChild(title);
-            audioElement.appendChild(timestamp);
-            audioElement.appendChild(editButton);
-            audioElement.appendChild(deleteButton);
+            actions.appendChild(playButton);
+            actions.appendChild(editButton);
+            actions.appendChild(deleteButton);
+
+            audioElement.appendChild(header);
+            audioElement.appendChild(actions);
             audioList.appendChild(audioElement);
         });
     }
