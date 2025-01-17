@@ -285,7 +285,7 @@ ${currentMode === "hizb" ? "الأحزاب" : "الأجزاء"} المتبقية
 
         const recordButton = document.createElement("button");
         recordButton.className = "record-button";
-        recordButton.textContent = "🎤";
+        recordButton.textContent = "🎙️";
         recordButton.title = "تسجيل ملاحظة صوتية";
         recordButton.onclick = () => startRecording(item);
 
